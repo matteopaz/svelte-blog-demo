@@ -22,6 +22,7 @@
     "vite-plugin-compression": "^0.3.5"
   },
   "dependencies": {
-    "env-variables": "^1.0.8"
+    "env-variables": "^1.0.8",
+    "normalize.css": "^8.0.1"
   }
 }
