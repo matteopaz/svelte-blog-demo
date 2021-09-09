@@ -1,5 +1,9 @@
 :root {
-    
+    --scalar-w: calc(100vw / 1200);
+    --primary: #ffffff;
+    --tint: #e6f7f6;
+    --shade: #4a5e5d;
+    --accent: #ff7700;
 }
 
 *, ::before, ::after {
