@@ -5,36 +5,23 @@
 </script>
 
 <div id="wrapper">
-  <Header class="header" />
+  <Header />
   <main>
-    <Posts class="left" />
-    <Postform class="right" />
+    <Posts />
+    <Postform />
   </main>
 </div>
 
 <style lang="postcss">
   #wrapper {
+    min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
-    min-height: 100vh;
-  }
-
-  .header {
-    flex-grow: 0;
-  }
-
+  } 
   main {
     display: grid;
-    grid-template-columns: 1fr calc(30vw);
-    grid-template-rows: 100%;
+    grid-template-columns: 1fr 25vw;
+    grid-template-rows: 1fr; 
     flex-grow: 1;
-  }
-  
-  .right {
-    grid-column: 2 / span 1;
-  }
-
-  .left {
-    grid-columns: 1 / span 1;
   }
 </style>

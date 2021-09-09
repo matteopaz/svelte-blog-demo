@@ -20,9 +20,10 @@
 
 <style lang="postcss">
   header {
-   --header-height: clamp(7.5rem, 6.75vw, 10rem);
+   --header-height: clamp(7.25rem, 5.75vw, 8.25rem);
    background-color: var(--accent);
    box-shadow: 0 0 11px 0 #ff7700b3;
+   flex-grow: 0;
   }
 
   nav {
