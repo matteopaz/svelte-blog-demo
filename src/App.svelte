@@ -2,13 +2,14 @@
     import Header from './comp/Header.svelte';
     import Postform from './comp/Postform.svelte';
     import Posts from './comp/Posts.svelte';
+    let formactive = false;
 </script>
 
 <div id="wrapper">
   <Header />
   <main>
-    <Posts />
-    <Postform />
+    <Posts postsfullw={!formactive} />
+    <Postform {formactive} />
   </main>
 </div>
 
@@ -21,7 +22,8 @@
   main {
     display: grid;
     grid-template-columns: 1fr 25vw;
-    grid-template-rows: 1fr; 
+    grid-template-rows: 100% 1fr;
     flex-grow: 1;
+    flex-basis: 90vh;
   }
 </style>

@@ -1,8 +1,12 @@
 <script>
-  
+  export let postsfullw = false;
+  let fullWidth = "";
+  if(true) {
+   fullWidth = "grid-column: 1 / span 1"
+  }
 </script>
 
-<article>
+<article style={fullWidth}>
 
  <div class="one">
 
@@ -19,16 +23,29 @@
 
 <style lang="postcss">
  article {
+   --spacing: clamp(0.75rem, 3vw, 4rem);
    grid-column: 1 / span 1;
    grid-row: 1 / 1;
    display: grid;
    grid-template-columns: 0.1px repeat(3, 1fr) 0.1px;
-   grid-row: 1fr;
-   grid-gap: clamp(1.5rem, 3.25vw, 6rem);
+   grid-gap: var(--spacing);
+   @media (max-width: 940px) {
+     grid-gap: calc( 1.2 * var(--spacing) );
+     grid-template-columns: 0.1px 1fr 1fr 0.1px;
+   }
+
+   @media (max-width: 640px) {
+     grid-row: 2 / 2;
+     grid-column: 1 / 3;
+   }
  }
 
  div {
-   padding: clamp(1.5rem, 3.25vw, 6rem) 0;
+   border: 2px solid red;
+   padding: var(--spacing) 0;
+   @media (max-width: 940px) {
+     padding: calc(1.2 * var(--spacing)) 0;
+   }
  }
 
  .one {
