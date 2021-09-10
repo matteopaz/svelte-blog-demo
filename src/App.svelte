@@ -3,10 +3,14 @@
     import Postform from './comp/Postform.svelte';
     import Posts from './comp/Posts.svelte';
     let formactive = false;
+    let loggedIn = false; // TODO: Move formactive and loggedIn to a store
+    function handleShow() {
+      if(loggedIn) formactive = !formactive;
+    }
 </script>
 
 <div id="wrapper">
-  <Header />
+  <Header on:login={() => loggedIn=true} on:showForm={handleShow} />
   <main>
     <Posts postsfullw={!formactive} />
     <Postform {formactive} />
@@ -21,7 +25,7 @@
   } 
   main {
     display: grid;
-    grid-template-columns: 1fr 25vw;
+    grid-template-columns: 1fr 30vw;
     grid-template-rows: 100% 1fr;
     flex-grow: 1;
     flex-basis: 90vh;

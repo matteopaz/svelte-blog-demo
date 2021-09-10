@@ -1,6 +1,25 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import Logo from '../assets/svelte.png';
-
+  const dispatch = createEventDispatcher();
+  let loggedIn = false;
+  let error = false;
+  function handleButton(key, headers) { 
+    return function dispatchEvent() {
+    if(key === "login") {
+      loggedIn = true;
+    }
+    if(key === "showForm" && !loggedIn) {
+      if(error) {
+      error = false;
+      setTimeout(() => error = true, 0);
+      } else {
+        error = true;
+      }
+    }
+       dispatch(key, headers);
+    }
+  }
 </script>
 
 <header>
@@ -9,16 +28,37 @@
       <h1>Svelte&nbsp;Blog</h1>
       <ul>
         <li>
-          <a>Log in</a>
+          <a on:click={handleButton('login', {})} 
+          class:error class:loggedIn>
+          Log in
+        </a>
         </li>
         <li>
-          <a>Post </a>
+          <a on:click={handleButton('showForm', {})}>Post </a>
         </li>
       </ul>
     </nav>
 </header>
 
 <style lang="postcss">
+  @keyframes attention {
+    from, to {
+      transform: rotate(0) scale(1);
+    }
+    15% {
+      transform: scale(1.15);
+    }
+    25% {
+      transform: rotate(10deg) scale(1.15);
+    }
+    75% {
+      transform: rotate(-10deg) scale(1.15);
+    }
+    85% {
+      transform: scale(1.15);
+    }
+  }
+
   header {
    --header-height: clamp(7.25rem, 5.75vw, 8.25rem);
    background-color: var(--accent);
@@ -84,4 +124,22 @@
       transform: scale(1.1);
     }
   }
+
+  a {
+    user-select: none;
+    display: block;
+  }
+
+  .error {
+    transition: color 0.4s ease;
+    color: #1212e6;
+    animation: attention 0.5s linear;
+  }
+
+  a.loggedIn {
+    color: #a2e5b2;
+    font-weight: unset;
+    animation: unset;
+  }
+
 </style>

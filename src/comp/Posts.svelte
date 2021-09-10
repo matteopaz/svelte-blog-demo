@@ -1,12 +1,17 @@
 <script>
-  export let postsfullw = false;
+  export let postsfullw = true;
   let fullWidth = "";
-  if(true) {
-   fullWidth = "grid-column: 1 / span 1"
+  let breaker = false;
+  $: if(postsfullw) {
+   fullWidth = "grid-column: 1 / span 2"
+   breaker = false;
+  } else {
+   fullWidth = "";
+   breaker = true;
   }
 </script>
 
-<article style={fullWidth}>
+<article style={fullWidth} class:breaker >
 
  <div class="one">
 
@@ -29,19 +34,20 @@
    display: grid;
    grid-template-columns: 0.1px repeat(3, 1fr) 0.1px;
    grid-gap: var(--spacing);
-   @media (max-width: 940px) {
+   @media (max-width: 1100px) {
      grid-gap: calc( 1.2 * var(--spacing) );
      grid-template-columns: 0.1px 1fr 1fr 0.1px;
    }
+ }
 
-   @media (max-width: 640px) {
+ .breaker {
+  @media (max-width: 800px) {
      grid-row: 2 / 2;
      grid-column: 1 / 3;
    }
  }
 
  div {
-   border: 2px solid red;
    padding: var(--spacing) 0;
    @media (max-width: 940px) {
      padding: calc(1.2 * var(--spacing)) 0;
