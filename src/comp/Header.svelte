@@ -128,11 +128,11 @@
   a {
     user-select: none;
     display: block;
+    transition: color 0.4s ease;
   }
 
   .error {
-    transition: color 0.4s ease;
-    color: #1212e6;
+    color: #a312c7;
     animation: attention 0.5s linear;
   }
 
