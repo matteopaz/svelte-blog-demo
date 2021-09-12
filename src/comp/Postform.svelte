@@ -1,12 +1,28 @@
 <script>
-  import tag_svg from '../assets/tags.svg';
+  import { capitalizeFirstLetter, getKey } from "./functions";
+  import { run_all } from "svelte/internal";
+  import tag_svg from "../assets/tags.svg";
   export let formactive = false;
   let show = [false, false, false, false]; //Total render, fade, input render, input fade
   let name = "";
   let title = "";
   let author = "";
   let body = "";
-  let tags = ["Foo", "Bar", "Baz"];
+  let tags =
+    "Coding Community America Funny Comedy Svelte Framework JS HTML CSS Backend Discussion Question Advice Story".split(
+      " "
+    );
+  let width = window.innerWidth;
+
+  // let selectedTags = (function () {
+  //   let map = new Map();
+  //   tags.forEach((e) => {
+  //     map.set(e, false);
+  //   });
+  //   return map;
+  // })();
+  let selectedTags = [];
+
   $: if (formactive) {
     show[0] = true;
     setTimeout(() => {
@@ -23,35 +39,91 @@
       show[0] = false;
     }, 400);
   }
+
+  function addTag(key) {
+    // return function flip_tag_value() {
+    //   if (!selectedTags.get(key)) {
+    //     selectedTags.set(key, true);
+    //   } else if (selectedTags.get(key)) {
+    //     selectedTags.set(key, false);
+    //   }
+    //   selectedTags = selectedTags;
+    // };
+
+    return function inner() {
+      if(selectedTags.find(e => e == key)) { 
+      selectedTags.splice(selectedTags.indexOf(key), 1);
+      selectedTags = selectedTags;
+      } else {
+       selectedTags = [...selectedTags, key];
+      }
+      console.log(selectedTags)
+    }
+  }
+
+  $: isSelected = (key, selectedTags) => {
+    // return selectedTags.get(key);
+    if(selectedTags.find(e => e == key) !== undefined) return true;
+    return false;
+  }
+
+  function handleSubmit() {
+    if(name === "" || title === "" || body === "") return null;
+    console.log(capitalizeFirstLetter(name), capitalizeFirstLetter(title), capitalizeFirstLetter(body), selectedTags, new Date());
+  }
 </script>
 
+<svelte:window on:resize={() => (width = window.innerWidth)} />
+
 {#if show[0]}
-  <form class:show={show[1]}>
+  <form class:show={show[1]} on:submit|preventDefault={handleSubmit}>
     {#if show[2]}
       <h2>Make a Post</h2>
       <div class="inputs" class:show={show[3]}>
         <div class="horizontal-group">
-          <label class="name">
-            Post as:
-            <input type="text" bind:value={name} />
-          </label>
-          <details on:click|preventDefault={null}>
-            <summary><img src={tag_svg} type="svg" alt="Tags" /></summary>
-            <ul class="chips">
-              {#each tags as tag}
-                <li class="chip">{tag}</li>
-              {/each}
-            </ul>
-          </details>
+          {#if width > 1100}
+            <label class="name">
+              <span class="label-text">Post as:</span>
+              <input type="text" bind:value={name} />
+            </label>
+            <details class="tags">
+              <summary><img src={tag_svg} type="svg" alt="Tags" /></summary>
+              <ul class="chips">
+                {#each tags as tag}
+                  <button class="chip" class:selected={isSelected(tag, selectedTags)} on:click|preventDefault={addTag(tag)}
+                    >{tag}</button
+                  >
+                {/each}
+              </ul>
+            </details>
+          {:else}
+            <div class="keep-horizontal">
+              <label class="name">
+                <span class="label-text">Post as:</span>
+                <input type="text" bind:value={name} />
+              </label>
+              <details class="tags">
+                <summary><img src={tag_svg} type="svg" alt="Tags" /></summary>
+                <ul class="chips">
+                  {#each tags as tag}
+                    <button class="chip" class:selected={isSelected(tag, selectedTags)} on:click|preventDefault={addTag(tag)}
+                      >{tag}</button
+                    >
+                  {/each}
+                </ul>
+              </details>
+            </div>
+          {/if}
           <label class="title">
-            Post Title:
+            <span class="label-text">Post Title:</span>
             <input type="text" bind:value={title} />
           </label>
         </div>
         <label class="body">
-          Post Body:
+          <span class="label-text">Post Body:</span>
           <textarea type="text" bind:value={body} />
         </label>
+        <input type="submit" class="submit" value="Post it!" />
       </div>
     {/if}
   </form>
@@ -59,6 +131,7 @@
 
 <style lang="postcss">
   form {
+    overflow: hidden;
     padding: 0 calc(var(--scalar-w) * 30);
     justify-self: end;
     background-color: var(--shade);
@@ -116,6 +189,7 @@
     border-bottom: 2px solid whitesmoke;
     min-height: 3rem;
     padding: 1rem;
+    font-size: clamp(0.75rem, 1.5vw, 1.75rem);
   }
 
   label {
@@ -130,6 +204,21 @@
     height: 16rem;
   }
 
+  .submit {
+    color: white;
+    width: 60%;
+    display: block;
+    margin: 8% auto;
+    background-color: var(--accent);
+    border-radius: 0;
+    border: none;
+    padding: 1rem 2rem;
+    text-align: center;
+    @media (max-width: 800px) {
+      font-size: 1.25rem;
+    }
+  }
+
   @media (max-width: 1100px) {
     .name,
     .title,
@@ -140,7 +229,7 @@
 
   .horizontal-group {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 3.25rem;
@@ -166,7 +255,7 @@
 
   details {
     cursor: pointer;
-    width: 11.25%;
+    width: min(4.5rem, 11.25%);
     aspect-ratio: 1 / 1;
     summary {
       list-style: none;
@@ -174,16 +263,102 @@
       background-color: var(--accent);
       height: 100%;
       width: 100%;
-      padding: 10%;
+      padding: 12.5%;
       display: grid;
       place-items: center;
       border-radius: 0.4rem;
       img {
         fill: white;
-        width: 80%;
-        height: 80%;
+        width: 65%;
+        height: 65%;
+      }
+    }
+    @media (max-width: 1100px) {
+      width: 17.5%;
+    }
+    @media (max-width: 800px) {
+      aspect-ratio: unset;
+      width: 20%;
+      height: 3.75rem;
+      summary img {
+        width: 2.5rem;
       }
     }
   }
 
+  .label-text {
+    display: inline-block;
+    height: 0rem;
+  }
+
+  .keep-horizontal {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    label.name {
+      margin: 0;
+    }
+  }
+
+  details[open] summary ~ * {
+    animation: sweep 0.5s ease-in-out;
+  }
+
+  @keyframes sweep {
+    0% {
+      opacity: 0;
+      margin-left: -10px;
+    }
+    100% {
+      opacity: 1;
+      margin-left: 0px;
+    }
+  }
+
+  .chips {
+    display: flex;
+    flex-flow: row wrap;
+    position: absolute;
+    background-color: #333333f3;
+    backdrop-filter: blur(5px);
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    max-width: max(40rem, 20vw);
+    overflow: hidden;
+    transform: translateX(-41.5%);
+    @media (max-width: 1100px) and (min-width: 800px) {
+      transform: translateX(-75%);
+      max-width: unset;
+      width: 20rem;
+    }
+    @media (max-width: 800px) {
+      transform: translateX(-41.5%);
+      max-width: unset;
+      width: 40rem;
+    }
+  }
+  .chip {
+    cursor: pointer;
+    border: none;
+    flex-grow: 1;
+    font-family: "Roboto Mono";
+    text-align: center;
+    letter-spacing: 1%;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--accent);
+    border-radius: 1rem;
+    font-size: 1.15rem;
+    margin: 0.6rem 0.8rem;
+    &:hover {
+      transition: letter-spacing 0.6s ease;
+      letter-spacing: 2%;
+      background-color: #ee5500;
+    }
+  }
+
+  .chip.selected {
+    background-color: #d756bb;
+  }
 </style>
