@@ -1,8 +1,7 @@
 <script>
   import { capitalizeFirstLetter, getKey } from "./functions";
-  import { run_all } from "svelte/internal";
   import tag_svg from "../assets/tags.svg";
-  export let formactive = false;
+  import { formActive } from "./stores";
   let show = [false, false, false, false]; //Total render, fade, input render, input fade
   let name = "";
   let title = "";
@@ -13,17 +12,9 @@
       " "
     );
   let width = window.innerWidth;
-
-  // let selectedTags = (function () {
-  //   let map = new Map();
-  //   tags.forEach((e) => {
-  //     map.set(e, false);
-  //   });
-  //   return map;
-  // })();
   let selectedTags = [];
 
-  $: if (formactive) {
+  $: if ($formActive) {
     show[0] = true;
     setTimeout(() => {
       show[1] = true;
@@ -41,15 +32,6 @@
   }
 
   function addTag(key) {
-    // return function flip_tag_value() {
-    //   if (!selectedTags.get(key)) {
-    //     selectedTags.set(key, true);
-    //   } else if (selectedTags.get(key)) {
-    //     selectedTags.set(key, false);
-    //   }
-    //   selectedTags = selectedTags;
-    // };
-
     return function inner() {
       if(selectedTags.find(e => e == key)) { 
       selectedTags.splice(selectedTags.indexOf(key), 1);

@@ -1,23 +1,21 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import Logo from '../assets/svelte.png';
-  const dispatch = createEventDispatcher();
+  import { formActive } from './stores.js';
+
   let loggedIn = false;
   let error = false;
-  function handleButton(key, headers) { 
-    return function dispatchEvent() {
-    if(key === "login") {
-      loggedIn = true;
-    }
-    if(key === "showForm" && !loggedIn) {
-      if(error) {
-      error = false;
-      setTimeout(() => error = true, 0);
+  function handleButton(key) { 
+    return function inner() {
+      if(key === 'login') {
+        loggedIn = true;
+      }
+      if(key === 'showForm' && loggedIn) {
+        formActive.update(bool => !bool);
+        error = false;
       } else {
         error = true;
       }
-    }
-       dispatch(key, headers);
     }
   }
 </script>
@@ -28,13 +26,13 @@
       <h1>Svelte&nbsp;Blog</h1>
       <ul>
         <li>
-          <a on:click={handleButton('login', {})} 
+          <a on:click={handleButton('login')} 
           class:error class:loggedIn>
           Log in
         </a>
         </li>
         <li>
-          <a on:click={handleButton('showForm', {})}>Post </a>
+          <a on:click={handleButton('showForm')}>Post </a>
         </li>
       </ul>
     </nav>

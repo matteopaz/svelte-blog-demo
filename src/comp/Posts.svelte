@@ -2,7 +2,9 @@
   export let postsfullw = true;
   let fullWidth = "";
   let breaker = false;
-  $: if(postsfullw) {
+  import { formActive } from './stores.js';
+  $: if(!$formActive) {
+    console.log('hello');
    fullWidth = "grid-column: 1 / span 2"
    breaker = false;
   } else {
@@ -36,7 +38,7 @@
    grid-gap: var(--spacing);
    @media (max-width: 1100px) {
      grid-gap: calc( 1.2 * var(--spacing) );
-     grid-template-columns: 0.1px 1fr 1fr 0.1px;
+     grid-template-columns: 0.001px 1fr 1fr 0.001px;
    }
  }
 

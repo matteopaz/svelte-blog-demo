@@ -2,18 +2,14 @@
     import Header from './comp/Header.svelte';
     import Postform from './comp/Postform.svelte';
     import Posts from './comp/Posts.svelte';
-    let formactive = false;
-    let loggedIn = false; // TODO: Move formactive and loggedIn to a store
-    function handleShow() {
-      if(loggedIn) formactive = !formactive;
-    }
+
 </script>
 
 <div id="wrapper">
-  <Header on:login={() => loggedIn=true} on:showForm={handleShow} />
+  <Header />
   <main>
-    <Posts postsfullw={!formactive} />
-    <Postform {formactive} />
+    <Posts />
+    <Postform />
   </main>
 </div>
 
