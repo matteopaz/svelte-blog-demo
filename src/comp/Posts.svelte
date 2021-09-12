@@ -28,7 +28,7 @@
 
 <style lang="postcss">
  article {
-   --spacing: clamp(0.75rem, 3vw, 4rem);
+   --spacing: calc(var(--scalar-w) * 50);
    grid-column: 1 / span 1;
    grid-row: 1 / 1;
    display: grid;
