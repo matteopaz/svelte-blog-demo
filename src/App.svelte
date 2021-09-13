@@ -21,7 +21,7 @@
   } 
   main {
     display: grid;
-    grid-template-columns: 1fr 30vw;
+    grid-template-columns: 70vw 30vw;
     grid-template-rows: 100% 1fr;
     flex-grow: 1;
     flex-basis: 90vh;

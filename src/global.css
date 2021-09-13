@@ -1,7 +1,7 @@
 :root {
     --scalar-w: calc(100vw / 1200);
     --primary: #ffffff;
-    --tint: #e6f7f6;
+    --tint: #f4e5e7;
     --shade: #4a5e5d;
     --accent: #ff7700;
 }

@@ -8,7 +8,7 @@
   let author = "";
   let body = "";
   let tags =
-    "Coding Community America Funny Comedy Svelte Framework JS HTML CSS Backend Discussion Question Advice Story".split(
+    "Coding Community Announcement Event Funny Comedy Svelte Framework JS HTML CSS Backend Discussion Question Advice Story".split(
       " "
     );
   let width = window.innerWidth;
@@ -33,10 +33,10 @@
 
   function addTag(key) {
     return function inner() {
-      if(selectedTags.find(e => e == key)) { 
+      if(selectedTags.find(e => e === key)) { 
       selectedTags.splice(selectedTags.indexOf(key), 1);
       selectedTags = selectedTags;
-      } else {
+      } else if(selectedTags.length < 3) {
        selectedTags = [...selectedTags, key];
       }
       console.log(selectedTags)
@@ -44,7 +44,6 @@
   }
 
   $: isSelected = (key, selectedTags) => {
-    // return selectedTags.get(key);
     if(selectedTags.find(e => e == key) !== undefined) return true;
     return false;
   }
@@ -113,6 +112,7 @@
 
 <style lang="postcss">
   form {
+    z-index: 5;
     overflow: hidden;
     padding: 0 calc(var(--scalar-w) * 30);
     justify-self: end;
@@ -201,7 +201,7 @@
     }
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     .name,
     .title,
     .body {
@@ -221,7 +221,7 @@
     label input {
       width: 100%;
     }
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
       align-items: flex-start;
       flex-flow: column nowrap;
       label:nth-child(1) {
@@ -255,7 +255,7 @@
         height: 65%;
       }
     }
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
       width: 17.5%;
     }
     @media (max-width: 800px) {
@@ -309,7 +309,7 @@
     max-width: max(40rem, 20vw);
     overflow: hidden;
     transform: translateX(-41.5%);
-    @media (max-width: 1100px) and (min-width: 800px) {
+    @media (max-width: 1200px) and (min-width: 800px) {
       transform: translateX(-75%);
       max-width: unset;
       width: 20rem;
