@@ -1,7 +1,8 @@
 <script>
   import { capitalizeFirstLetter, getKey } from "./functions";
   import tag_svg from "../assets/tags.svg";
-  import { formActive } from "./stores";
+  import { formActive, posts } from "./stores";
+import Post from "./Post.svelte";
   let show = [false, false, false, false]; //Total render, fade, input render, input fade
   let name = "";
   let title = "";
@@ -50,7 +51,16 @@
 
   function handleSubmit() {
     if(name === "" || title === "" || body === "") return null;
-    console.log(capitalizeFirstLetter(name), capitalizeFirstLetter(title), capitalizeFirstLetter(body), selectedTags, new Date());
+    const newPost = {
+      userId: capitalizeFirstLetter(name),
+      id: $posts.at(0).id - 1,
+      title: capitalizeFirstLetter(title),
+      body: capitalizeFirstLetter(body),
+      tags: selectedTags
+    }
+    posts.update((arr) => {
+      return [newPost, ...arr];
+    });
   }
 </script>
 

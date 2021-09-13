@@ -1,87 +1,133 @@
 <script>
-  import { onMount } from 'svelte';
-  import Post from './Post.svelte';
+  import { onMount, onDestroy } from "svelte";
+  import { formActive, posts } from "./stores.js";
+  import Post from "./Post.svelte";
+import { get } from "svelte/store";
   export let postsfullw = true;
   let fullWidth = "";
   let breaker = false;
   let width = window.innerWidth;
-  import { formActive } from './stores.js';
-  $: if(!$formActive) {
-   fullWidth = "grid-column: 1 / span 2"
-   breaker = false;
+  $: if (!$formActive) {
+    fullWidth = "grid-column: 1 / span 2";
+    breaker = false;
   } else {
-   fullWidth = "";
-   breaker = true;
+    fullWidth = "";
+    breaker = true;
   }
-  onMount(async () => {
-   
-  });
+
+  let splitPosts = {
+    threeCol: {
+      one: [],
+      two: [],
+      three: [],
+    },
+    twoCol: {
+      one: [],
+      two: [],
+    },
+  };
+
+  $: {
+    const Posts = $posts;
+    const l = Posts.length;
+    if (l % 3 === 0) {
+      splitPosts.threeCol.one = Posts.slice(0, l / 3);
+      splitPosts.threeCol.two = Posts.slice(l / 3, (2 * l) / 3);
+      splitPosts.threeCol.three = Posts.slice((2 * l) / 3, l);
+    } else if (l % 3 === 1) {
+      splitPosts.threeCol.one = Posts.slice(0, (l - 1) / 3);
+      splitPosts.threeCol.two = Posts.slice((l - 1) / 3, (2 * (l - 1)) / 3);
+      splitPosts.threeCol.three = Posts.slice((2 * (l - 1)) / 3, l);
+    } else if (l % 3 === 2) {
+      splitPosts.threeCol.one = Posts.slice(0, (l - 2) / 3);
+      splitPosts.threeCol.two = Posts.slice((l - 2) / 3, Math.ceil(2 * (l - 1) / 3));
+      splitPosts.threeCol.three = Posts.slice(Math.ceil(2 * (l - 1) / 3) , l);
+    }
+    if (l % 2 === 0) {
+      splitPosts.twoCol.one = Posts.slice(0, l / 2);
+      splitPosts.twoCol.two = Posts.slice(l / 2, l);
+    } else if (l % 2 === 1) {
+      splitPosts.twoCol.one = Posts.slice(0, (l - 1) / 2);
+      splitPosts.twoCol.two = Posts.slice((l - 1) / 2, l);
+    }
+  }
 </script>
 
-<svelte:window on:resize={() => width = window.innerWidth} />
+<svelte:window on:resize={() => (width = window.innerWidth)} />
 
 <article style={fullWidth} class:breaker>
-{#if width > 1000}
- <div class="one">
-  <Post title="Lorem Ipsum" name="Dolor Sit Amet" body="Die nachstehende Tabelle zeigt die Mindestkapitalerhaltungsquoten, die Banken" />
- </div>
- <div class="two">
-  <Post title="Lorem Ipsum" name="Dolor Sit Amet" body=" isudnfguisa nfuisnfuid saiufn saiufndsauifn sdiafnsdai nfiusadnfiusdn fuisan fidns nfduisfn isudfuisdf iusa nfiudsainuifsdnaiuf ndsaiu fiDie nachstehende Tabelle zeigt die Mindestkapitalerhaltungsquoten, die Banken" />
- </div>
- <div class="three">
-  <Post title="Lorem Ipsum" name="Dolor Sit Amet" body="Die nachstehende Tabelle zeigt die Mindestkapitalerhaltungsquoten, die Banken" />
- </div>
-{:else}
-  <div class="one">
-  <Post title="Lorem Ipsum" name="Dolor Sit Amet" body="Die nachstehende Tabelle zeigt die Mindestkapitalerhaltungsquoten, die Banken" />
- </div>
- <div class="two">
-  <Post title="Lorem Ipsum" name="Dolor Sit Amet" body="ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds ijasgnnnnnnnnnnnnnnnndiunds sgn iugndsuia gndiusa ngiudsan giusan giudsnagiu dsanuignsdauig dsauignsdaiugd ndsaiugnidusag Die nachstehende Tabelle zeigt die Mindestkapitalerhaltungsquoten, die Banken" />
- </div>
-{/if}
+  {#if width > 1000}
+    <div class="one">
+      {#each splitPosts.threeCol.one as props }
+      <Post {...props} />
+      {/each}
+    </div>
+    <div class="two">
+      {#each splitPosts.threeCol.two as props }
+      <Post {...props} />
+      {/each}
+    </div>
+    <div class="three">
+      {#each splitPosts.threeCol.three as props }
+      <Post {...props} />
+      {/each}
+    </div>
+  {:else}
+    <div class="one">
+      {#each splitPosts.threeCol.one as props }
+      <Post {...props} />
+      {/each}
+    </div>
+    <div class="two">
+      {#each splitPosts.threeCol.two as props }
+      <Post {...props} />
+      {/each}
+    </div>
+  {/if}
 </article>
+
 <style lang="postcss">
- article {
-   --spacing: calc(var(--scalar-w) * 26);
-   grid-column: 1 / span 1;
-   grid-row: 1 / 1;
-   display: grid;
-   grid-template-columns: 0.1px repeat(3, 1fr) 0.1px;
-   grid-gap: var(--spacing);
-   @media (max-width: 1000px) {
-     grid-gap: calc( 1.2 * var(--spacing) );
-     grid-template-columns: 0.001px 1fr 1fr 0.001px;
-   }
- }
+  article {
+    width: calc(100vw - 17px);
+    --spacing: calc(var(--scalar-w) * 26);
+    grid-column: 1 / span 1;
+    grid-row: 1 / 1;
+    display: grid;
+    grid-template-columns: 0.1px repeat(3, 1fr) 0.1px;
+    grid-gap: var(--spacing);
+    @media (max-width: 1000px) {
+      grid-gap: calc(1.2 * var(--spacing));
+      grid-template-columns: 0.001px 1fr 1fr 0.001px;
+    }
+  }
 
- .breaker {
-  @media (max-width: 800px) {
-     grid-row: 2 / 2;
-     grid-column: 1 / 3;
-   }
- }
+  .breaker {
+    @media (max-width: 800px) {
+      grid-row: 2 / 2;
+      grid-column: 1 / 3;
+    }
+  }
 
- div {
-   width: initial;
-   padding: var(--spacing) 0;
-   display: flex;
-   flex-flow: column nowrap;
-   justify-content: space-between;
-   align-items: stretch;
-   @media (max-width: 1200px) {
-     padding: calc(1.2 * var(--spacing)) 0;
-   }
- }
+  div {
+    width: initial;
+    padding: var(--spacing) 0;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    @media (max-width: 1200px) {
+      padding: calc(1.2 * var(--spacing)) 0;
+    }
+  }
 
- .one {
-   grid-column: 2 / span 1;
- }
+  .one {
+    grid-column: 2 / span 1;
+  }
 
- .two {
-   grid-column: 3 / span 1;
- }
+  .two {
+    grid-column: 3 / span 1;
+  }
 
- .three {
-   grid-column: 4 / span 1;
- }
+  .three {
+    grid-column: 4 / span 1;
+  }
 </style>
