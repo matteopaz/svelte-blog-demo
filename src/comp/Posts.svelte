@@ -88,7 +88,7 @@ import { get } from "svelte/store";
 
 <style lang="postcss">
   article {
-    width: calc(100vw - 17px);
+    width: 100%;
     --spacing: calc(var(--scalar-w) * 26);
     grid-column: 1 / span 1;
     grid-row: 1 / 1;
