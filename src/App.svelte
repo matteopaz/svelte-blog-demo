@@ -1,15 +1,22 @@
 <script>
+  import { get } from 'svelte/store';
   import { onMount } from 'svelte';
   import Header from "./comp/Header.svelte";
   import Postform from "./comp/Postform.svelte";
   import Posts from "./comp/Posts.svelte";
   import { posts } from './comp/stores.js';
   onMount(async () => {
-    const fetcher = await fetch("https://jsonplaceholder.typicode.com/posts");
-    const json = await fetcher.json();
-    posts.update((arr) => {
-      return json.splice(1, 10);
-    });
+    if(localStorage.getItem('posts')) {
+      const localPosts = await JSON.parse(localStorage.getItem('posts'));
+      posts.set(localPosts);
+
+    } else {
+      const fetcher = await fetch("https://jsonplaceholder.typicode.com/posts");
+      const json = await fetcher.json();
+      posts.set(json.splice(1, 10));
+      const nowPosts = await JSON.stringify(get(posts));
+      localStorage.setItem('posts', nowPosts);
+    }
   });
 </script>
 
