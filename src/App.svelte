@@ -5,15 +5,21 @@
   import Postform from "./comp/Postform.svelte";
   import Posts from "./comp/Posts.svelte";
   import { posts } from './comp/stores.js';
+  import { randomizeNameAndTags } from './comp/functions.js'
   onMount(async () => {
     if(localStorage.getItem('posts')) {
       const localPosts = await JSON.parse(localStorage.getItem('posts'));
       posts.set(localPosts);
-
     } else {
       const fetcher = await fetch("https://jsonplaceholder.typicode.com/posts");
-      const json = await fetcher.json();
-      posts.set(json.splice(1, 10));
+      let json = await fetcher.json();
+      json = json.slice(1, 10);
+      json.forEach(e => {
+        const rand = randomizeNameAndTags();
+        e.userId = rand[0];
+        e.tags = rand[1];
+      });
+      posts.set(json);
       const nowPosts = await JSON.stringify(get(posts));
       localStorage.setItem('posts', nowPosts);
     }
