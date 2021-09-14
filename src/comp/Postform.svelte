@@ -1,6 +1,7 @@
 <script>
-  import { capitalizeFirstLetter, getKey } from "./functions";
+  import { capitalizeFirstLetter } from "./functions";
   import tag_svg from "../assets/tags.svg";
+  import { get } from 'svelte/store'
   import { formActive, posts } from "./stores";
 import Post from "./Post.svelte";
   let show = [false, false, false, false]; //Total render, fade, input render, input fade
@@ -40,7 +41,6 @@ import Post from "./Post.svelte";
       } else if(selectedTags.length < 3) {
        selectedTags = [...selectedTags, key];
       }
-      console.log(selectedTags)
     }
   }
 
@@ -49,7 +49,7 @@ import Post from "./Post.svelte";
     return false;
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if(name === "" || title === "" || body === "") return null;
     const newPost = {
       userId: capitalizeFirstLetter(name),
@@ -58,9 +58,10 @@ import Post from "./Post.svelte";
       body: capitalizeFirstLetter(body),
       tags: selectedTags
     }
-    posts.update((arr) => {
+    await posts.update((arr) => {
       return [newPost, ...arr];
     });
+    localStorage.setItem('posts', JSON.stringify($posts));
   }
 </script>
 

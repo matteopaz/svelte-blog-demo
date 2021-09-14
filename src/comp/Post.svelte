@@ -13,8 +13,8 @@
    return capitalizeFirstLetter(title.split(" ").slice(0, 3).join(" "));
   }
   let user = "";
-    const r = () => Math.floor(Math.random() * 9);
-    if(typeof userId == 'number') {
+  const r = () => Math.floor(Math.random() * 9);
+    if(typeof userId === 'number') {
       switch(r()) {
         case 0: user = "James Jameson";
         break;
@@ -52,7 +52,9 @@
       }
       tags = tags.filter(e => e != undefined);
       tags = [... new Set(tags)];
-    }
+      } else {
+        user = userId;
+      }
 </script>
 
 <div class="post" class:break={$formActive}>
