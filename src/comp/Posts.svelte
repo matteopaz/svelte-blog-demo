@@ -1,8 +1,6 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
   import { formActive, posts } from "./stores.js";
   import Post from "./Post.svelte";
-import { get } from "svelte/store";
   export let postsfullw = true;
   let fullWidth = "";
   let breaker = false;
@@ -58,28 +56,28 @@ import { get } from "svelte/store";
 <article style={fullWidth} class:breaker>
   {#if width > 1000}
     <div class="one">
-      {#each splitPosts.threeCol.one as props }
+      {#each splitPosts.threeCol.one as props (props.id)}
       <Post {...props} />
       {/each}
     </div>
     <div class="two">
-      {#each splitPosts.threeCol.two as props }
+      {#each splitPosts.threeCol.two as props (props.id)}
       <Post {...props} />
       {/each}
     </div>
     <div class="three">
-      {#each splitPosts.threeCol.three as props }
+      {#each splitPosts.threeCol.three as props (props.id)}
       <Post {...props} />
       {/each}
     </div>
   {:else}
     <div class="one">
-      {#each splitPosts.threeCol.one as props }
+      {#each splitPosts.threeCol.one as props (props.id)}
       <Post {...props} />
       {/each}
     </div>
     <div class="two">
-      {#each splitPosts.threeCol.two as props }
+      {#each splitPosts.threeCol.two as props (props.id)}
       <Post {...props} />
       {/each}
     </div>
