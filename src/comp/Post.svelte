@@ -4,7 +4,7 @@
   import Logo from '../assets/svelte.png';
   import { formActive } from './stores.js';
   import { capitalizeFirstLetter } from './functions.js';
-  export let userId = 0;
+  export let userId = "";
   export let title = "";
   export let body = "";
   export let tags = [];
@@ -41,12 +41,12 @@
     padding: clamp(1.75rem, 3vw, 3.5rem);
     z-index: -1;
     grid-template-columns: 2fr 5fr;
-    grid-template-rows: 0.2fr max(4vw, 5rem) 0.35fr;
+    grid-template-rows: 0.2fr max(4vw, 5rem) 0.5fr;
     grid-auto-rows: min-content;
     place-items: start;
-    gap: max(1.5rem, 2vw) 1vw;
+    gap: min(1rem, 1.25vw) 1vw;
     @media (max-width: 1200px) {
-      grid-template-rows: 0.15fr max(2.5vw, 4rem) 0.35fr;
+      grid-template-rows: 0.15fr max(2.5vw, 4rem) 0.5fr;
       gap: max(1rem, 1.5vw) 0.75vw;
     }
   }

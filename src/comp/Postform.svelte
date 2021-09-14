@@ -1,6 +1,7 @@
 <script>
   import { capitalizeFirstLetter } from "./functions";
   import tag_svg from "../assets/tags.svg";
+  import svelte_svg from "../assets/svelte.svg";
   import { get } from 'svelte/store'
   import { formActive, posts } from "./stores";
 import Post from "./Post.svelte";
@@ -33,11 +34,11 @@ import Post from "./Post.svelte";
     }, 400);
   }
 
-  function addTag(key) {
+  function addTag(key) { 
     return function inner() {
-      if(selectedTags.find(e => e === key)) { 
+      if(selectedTags.find(e => e === key)) { // If it finds the key, it removes it
       selectedTags.splice(selectedTags.indexOf(key), 1);
-      selectedTags = selectedTags;
+      selectedTags = selectedTags; // Self assigning to make svelte react
       } else if(selectedTags.length < 3) {
        selectedTags = [...selectedTags, key];
       }
@@ -117,6 +118,7 @@ import Post from "./Post.svelte";
         </label>
         <input type="submit" class="submit" value="Post it!" />
       </div>
+      <img src={svelte_svg} alt="Svelte Logo" class="background-logo" />
     {/if}
   </form>
 {/if}
@@ -137,6 +139,7 @@ import Post from "./Post.svelte";
     @media (max-width: 800px) {
       grid-column: 1 / span 2;
       padding: 0 max(3.5rem, 6.5vw);
+      height: 100vh;
     }
   }
 
@@ -353,5 +356,15 @@ import Post from "./Post.svelte";
 
   .chip.selected {
     background-color: #d756bb;
+  }
+
+  .background-logo {
+    display: block;
+    width: 150%;
+    margin: 25% auto 0 auto;
+    transform: translateX(-15%);
+    @media (max-width: 800px) {
+      display: none;
+    }
   }
 </style>

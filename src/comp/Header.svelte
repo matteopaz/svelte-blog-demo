@@ -63,6 +63,7 @@
    box-shadow: 0 0 11px 0 #ff7700b3;
    flex-grow: 0;
    max-width: calc(100vw - 17px);
+   z-index: 10;
   }
 
   nav {
