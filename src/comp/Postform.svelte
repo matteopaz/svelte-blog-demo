@@ -125,6 +125,7 @@ import Post from "./Post.svelte";
 
 <style lang="postcss">
   form {
+    border: 2px solid red;
     z-index: 5;
     overflow: hidden;
     padding: 0 calc(var(--scalar-w) * 30);
@@ -139,7 +140,7 @@ import Post from "./Post.svelte";
     @media (max-width: 800px) {
       grid-column: 1 / span 2;
       padding: 0 max(3.5rem, 6.5vw);
-      height: 100vh;
+      height: max(100vh, 85rem);
     }
   }
 

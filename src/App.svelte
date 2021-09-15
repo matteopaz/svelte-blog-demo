@@ -4,7 +4,7 @@
   import Header from "./comp/Header.svelte";
   import Postform from "./comp/Postform.svelte";
   import Posts from "./comp/Posts.svelte";
-  import { posts } from './comp/stores.js';
+  import { posts, formActive } from './comp/stores.js';
   import { randomizeNameAndTags } from './comp/functions.js'
   onMount(async () => {
     if(localStorage.getItem('posts')) {
@@ -28,7 +28,7 @@
 
 <div id="wrapper">
   <Header />
-  <main>
+  <main class:break={$formActive} >
     <Posts />
     <Postform />
   </main>
@@ -41,10 +41,16 @@
     flex-flow: column nowrap;
   }
   main {
+    grid-gap: 0;
     display: grid;
     grid-template-columns: calc(70vw - 8.5px) calc(30vw - 8.5px);
     grid-template-rows: 100% 1fr;
     flex-grow: 1;
     flex-basis: 90vh;
+    @media (max-width: 800px) {
+      &.break {
+        grid-template-rows: max(100vh, 85rem) 1fr;
+      }
+    }
   }
 </style>

@@ -89,7 +89,7 @@
     width: 100%;
     --spacing: calc(var(--scalar-w) * 26);
     grid-column: 1 / span 1;
-    grid-row: 1 / 1;
+    grid-rows: 1 / 2;
     display: grid;
     grid-template-columns: 0.1px repeat(3, 1fr) 0.1px;
     grid-gap: var(--spacing);
@@ -101,7 +101,8 @@
 
   .breaker {
     @media (max-width: 800px) {
-      grid-row: 2 / 2;
+      grid-row: 2 / 3;
+      border: 2px solid red;
       grid-column: 1 / 3;
     }
   }
