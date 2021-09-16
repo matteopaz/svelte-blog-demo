@@ -4,8 +4,9 @@
   import Header from "./comp/Header.svelte";
   import Postform from "./comp/Postform.svelte";
   import Posts from "./comp/Posts.svelte";
-  import { posts, formActive } from './comp/stores.js';
+  import { posts, formActive, log } from './comp/stores.js';
   import { randomizeNameAndTags } from './comp/functions.js'
+  
   onMount(async () => {
     if(localStorage.getItem('posts')) {
       const localPosts = await JSON.parse(localStorage.getItem('posts'));
@@ -27,6 +28,7 @@
 </script>
 
 <div id="wrapper">
+  {$log}
   <Header />
   <main class:break={$formActive} >
     <Posts />

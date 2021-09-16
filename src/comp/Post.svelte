@@ -2,15 +2,22 @@
 
 <script>
   import Logo from '../assets/svelte.png';
-  import { formActive } from './stores.js';
+  import { formActive, filter } from './stores.js';
   import { capitalizeFirstLetter } from './functions.js';
   export let userId = "";
   export let title = "";
   export let body = "";
   export let tags = [];
-  export let id;
   function processTitle(title) {
    return capitalizeFirstLetter(title.split(" ").slice(0, 3).join(" "));
+
+  const filtered = () => {
+    const filters = $filter;
+    for(let i = 0; i < filters.length; i++) {
+      const truth = tags.find(tag => tag === filter)
+      if(!truth) break;
+    }
+  }
   }
 </script>
 

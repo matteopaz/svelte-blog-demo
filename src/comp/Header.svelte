@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import Logo from '../assets/svelte.png';
   import { formActive } from './stores.js';
 

@@ -1,7 +1,6 @@
 <script>
   import { formActive, posts } from "./stores.js";
   import Post from "./Post.svelte";
-  export let postsfullw = true;
   let fullWidth = "";
   let breaker = false;
   let width = window.innerWidth;
@@ -102,7 +101,6 @@
   .breaker {
     @media (max-width: 800px) {
       grid-row: 2 / 3;
-      border: 2px solid red;
       grid-column: 1 / 3;
     }
   }

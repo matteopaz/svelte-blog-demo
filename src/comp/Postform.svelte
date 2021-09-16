@@ -2,8 +2,7 @@
   import { capitalizeFirstLetter } from "./functions";
   import tag_svg from "../assets/tags.svg";
   import svelte_svg from "../assets/svelte.svg";
-  import { get } from 'svelte/store'
-  import { formActive, posts } from "./stores";
+  import { formActive, posts, filter, log } from "./stores";
 import Post from "./Post.svelte";
   let show = [false, false, false, false]; //Total render, fade, input render, input fade
   let name = "";
@@ -45,9 +44,22 @@ import Post from "./Post.svelte";
     }
   }
 
-  $: isSelected = (key, selectedTags) => {
-    if(selectedTags.find(e => e == key) !== undefined) return true;
+  $: isSelected = (key, selected_Tags) => {
+    const selectedTags = selected_Tags;
+    if(selectedTags.find(e => e === key)) return true;
     return false;
+  }
+
+  function addFilter(tag) {
+    return function inner() {
+      let Filter = $filter;
+      if(isSelected(tag, Filter)) {
+        Filter.splice(Filter.indexOf(tag), 1);
+      } else {
+        Filter = [...Filter, tag];
+      }
+      filter.set(Filter);
+    }
   }
 
   async function handleSubmit() {
@@ -118,6 +130,15 @@ import Post from "./Post.svelte";
         </label>
         <input type="submit" class="submit" value="Post it!" />
       </div>
+      <details class="tags filter">
+      <summary>Filter Posts</summary>
+      <ul class="chips" class:red>
+        {#each tags as tag}
+           <button class="chip" class:selected={isSelected(tag, $filter)} 
+           on:click|preventDefault={addFilter(tag)}>{tag}</button>
+        {/each}
+      </ul>
+      </details>
       <img src={svelte_svg} alt="Svelte Logo" class="background-logo" />
     {/if}
   </form>
@@ -125,7 +146,6 @@ import Post from "./Post.svelte";
 
 <style lang="postcss">
   form {
-    border: 2px solid red;
     z-index: 5;
     overflow: hidden;
     padding: 0 calc(var(--scalar-w) * 30);
@@ -205,7 +225,7 @@ import Post from "./Post.svelte";
     color: white;
     width: 60%;
     display: block;
-    margin: 8% auto;
+    margin: 8% auto 0 auto;
     background-color: var(--accent);
     border-radius: 0;
     border: none;
@@ -250,7 +270,7 @@ import Post from "./Post.svelte";
     }
   }
 
-  details {
+  details:not(.filter) {
     cursor: pointer;
     width: min(4.5rem, 11.25%);
     aspect-ratio: 1 / 1;
@@ -367,5 +387,32 @@ import Post from "./Post.svelte";
     @media (max-width: 800px) {
       display: none;
     }
+  }
+
+  details.filter {
+    cursor: pointer;
+    border-radius: 0;
+    margin: 0rem auto;
+    background-color: var(--accent);
+    font-family: 'Roboto Mono';
+    color: white;
+    width: min(85%, 17.5rem);
+    padding: max(0.75vw, 1rem) max(1.25vw, 1.5rem);
+    text-align: center;
+    display: block;
+    user-select: none;
+    ul {
+      transform: translate(-100%, -50%);
+    }
+    @media (max-width: 800px) {
+      margin: -6rem auto 0 auto;
+      ul {
+        transform: translate(-32.5%, 10%);
+      }
+    }
+  }
+
+  .red {
+    border: 2px solid red;
   }
 </style>
