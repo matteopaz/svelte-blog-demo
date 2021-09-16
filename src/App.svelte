@@ -42,12 +42,14 @@
     min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
+    max-width: calc(100vw -17px);
   }
   main {
     grid-gap: 0;
     display: grid;
-    grid-template-columns: calc(70vw - 8.5px) calc(30vw - 8.5px);
+    grid-template-columns: 7fr 3fr;
     grid-template-rows: 100% 1fr;
+    width: 100%;
     flex-grow: 1;
     flex-basis: 90vh;
     @media (max-width: 800px) {
