@@ -2,19 +2,17 @@
   import { capitalizeFirstLetter } from "./functions";
   import tag_svg from "../assets/tags.svg";
   import svelte_svg from "../assets/svelte.svg";
-  import { formActive, posts, filter, log } from "./stores";
-import Post from "./Post.svelte";
+  import { formActive, posts, filter } from "./stores";
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
   let show = [false, false, false, false]; //Total render, fade, input render, input fade
   let name = "";
   let title = "";
   let author = "";
   let body = "";
-  let tags =
-    "Coding Community Announcement Event Funny Comedy Svelte Framework JS HTML CSS Backend Discussion Question Advice Story".split(
-      " "
-    );
   let width = window.innerWidth;
   let selectedTags = [];
+  const tags = "Coding Community Announcement Event Funny Comedy Svelte Framework JS HTML CSS Backend Discussion Question Advice Story".split(" ");
 
   $: if ($formActive) {
     show[0] = true;
@@ -132,13 +130,14 @@ import Post from "./Post.svelte";
       </div>
       <details class="tags filter">
       <summary>Filter Posts</summary>
-      <ul class="chips" class:red>
+      <ul class="chips">
         {#each tags as tag}
            <button class="chip" class:selected={isSelected(tag, $filter)} 
            on:click|preventDefault={addFilter(tag)}>{tag}</button>
         {/each}
       </ul>
       </details>
+      <button on:click={() => { localStorage.clear(); dispatch('refresh', {}); }} class="refresh">Refresh Posts</button>
       <img src={svelte_svg} alt="Svelte Logo" class="background-logo" />
     {/if}
   </form>
@@ -189,7 +188,7 @@ import Post from "./Post.svelte";
     color: white;
     transition: opacity 0.5s ease;
     font-family: "Roboto Mono", sans-serif;
-    height: 40%;
+    height: 50rem;
     justify-content: space-between;
     font-size: clamp(1.5rem, calc(var(--scalar-w) * 16), 2.5rem);
     @media (max-width: 800px) {
@@ -382,7 +381,7 @@ import Post from "./Post.svelte";
   .background-logo {
     display: block;
     width: 150%;
-    margin: 25% auto 0 auto;
+    margin: 37.5% auto 0 auto;
     transform: translateX(-15%);
     @media (max-width: 800px) {
       display: none;
@@ -395,12 +394,13 @@ import Post from "./Post.svelte";
     margin: 0rem auto;
     background-color: var(--accent);
     font-family: 'Roboto Mono';
+    font-size: clamp(1.25rem, calc(var(--scalar-w) * 14), 2.25rem);
     color: white;
-    width: min(85%, 17.5rem);
     padding: max(0.75vw, 1rem) max(1.25vw, 1.5rem);
     text-align: center;
     display: block;
     user-select: none;
+    max-width: 90%;
     ul {
       transform: translate(-100%, -50%);
     }
@@ -412,7 +412,21 @@ import Post from "./Post.svelte";
     }
   }
 
-  .red {
-    border: 2px solid red;
+  .refresh {
+    background: none;
+    border: none;
+    border-radius: none;
+    display: block;
+    margin: 4rem auto;
+    font-family: 'Open Sans Condensed';
+    letter-spacing: 0.15rem;
+    font-size: clamp(1.25rem, calc(var(--scalar-w) * 12), 2.25rem);
+    color: white;
+    font-weight: 500;
+    padding: 1rem;
+    &:hover {
+      color: var(--accent);
+      background-color: #777777bb;
+    }
   }
 </style>

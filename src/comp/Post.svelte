@@ -4,23 +4,29 @@
   import Logo from '../assets/svelte.png';
   import { formActive, filter } from './stores.js';
   import { capitalizeFirstLetter } from './functions.js';
+  import { createEventDispatcher } from 'svelte';
   export let userId = "";
   export let title = "";
   export let body = "";
   export let tags = [];
+  const dispatch = createEventDispatcher();
   function processTitle(title) {
    return capitalizeFirstLetter(title.split(" ").slice(0, 3).join(" "));
+  }
 
-  const filtered = () => {
+  $: filtered = () => {
     const filters = $filter;
-    for(let i = 0; i < filters.length; i++) {
-      const truth = tags.find(tag => tag === filter)
+    let i = 0;
+    for(i; i < filters.length; i++) {
+      const truth = tags.find(tag => tag === filters[i]);
       if(!truth) break;
     }
-  }
+    dispatch('filtered', {...$$props})
+    return (i === filters.length)
   }
 </script>
 
+{#if filtered()}
 <div class="post" class:break={$formActive}>
   <img src={Logo} alt="Svelte logo" />
   <h4>{processTitle(title)}</h4>
@@ -34,7 +40,7 @@
     {capitalizeFirstLetter(body)}
   </p>
 </div>
-
+{/if}
 <style>
   .post {
     position: relative;

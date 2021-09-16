@@ -5,3 +5,4 @@
 /.replit
 .gitignore
 package-lock.json
+vite.config.js

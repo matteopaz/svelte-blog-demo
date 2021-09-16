@@ -4,17 +4,18 @@
   import Header from "./comp/Header.svelte";
   import Postform from "./comp/Postform.svelte";
   import Posts from "./comp/Posts.svelte";
-  import { posts, formActive, log } from './comp/stores.js';
+  import { posts, formActive } from './comp/stores.js';
   import { randomizeNameAndTags } from './comp/functions.js'
   
-  onMount(async () => {
+  async function GetAndRandomizePosts() {
+    const rand = Math.floor(Math.random() * 90);
     if(localStorage.getItem('posts')) {
       const localPosts = await JSON.parse(localStorage.getItem('posts'));
       posts.set(localPosts);
     } else {
       const fetcher = await fetch("https://jsonplaceholder.typicode.com/posts");
       let json = await fetcher.json();
-      json = json.slice(1, 10);
+      json = json.slice(rand, rand + 9);
       json.forEach(e => {
         const rand = randomizeNameAndTags();
         e.userId = rand[0];
@@ -24,15 +25,15 @@
       const nowPosts = await JSON.stringify(get(posts));
       localStorage.setItem('posts', nowPosts);
     }
-  });
+  }
+  onMount(GetAndRandomizePosts);
 </script>
 
 <div id="wrapper">
-  {$log}
   <Header />
   <main class:break={$formActive} >
     <Posts />
-    <Postform />
+    <Postform on:refresh={GetAndRandomizePosts} />
   </main>
 </div>
 

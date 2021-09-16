@@ -1,12 +1,14 @@
+const tags = "Coding Community Announcement Event Funny Comedy Svelte Framework JS HTML CSS Backend Discussion Question Advice Story".split(" ");
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function randomizeNameAndTags() {
-    const r = () => Math.floor(Math.random() * 9);
+    const r = (max) => Math.floor(Math.random() * max);
     let user = "";
-    let tags = [null, null, null];
-    switch (r()) {
+    let newtags = [null, null, null];
+    switch (r(9)) {
         case 0:
             user = "James Jameson";
             break;
@@ -37,39 +39,21 @@ function randomizeNameAndTags() {
     }
     const tagger = () => {
         for (let i = 0; i < 3; i++) {
-            switch (r()) {
-                case 0:
-                    tags[i] = "Community";
-                    break;
-                case 1:
-                    tags[i] = "Svelte";
-                    break;
-                case 2:
-                    tags[i] = "CSS";
-                    break;
-                case 3:
-                    tags[i] = "JS";
-                    break;
-                case 4:
-                    tags[i] = "Announcement";
-                    break;
-                default:
-                    continue;
-            }
+            newtags[i] = tags[r(16)];
         }
     }
     let empty = true;
     while (empty) {
         tagger();
-        tags = tags.filter(e => e !== null);
-        tags = [...new Set(tags)];
-        if (!tags[0] && !tags[1] && !tags[2]) {
+        newtags = newtags.filter(e => e !== null);
+        newtags = [...new Set(newtags)];
+        if (!newtags[0] && !newtags[1] && !newtags[2]) {
             empty = true;
         } else {
             empty = false;
         }
     }
-    return [user, tags];
+    return [user, newtags];
 }
 
 export { capitalizeFirstLetter, randomizeNameAndTags };

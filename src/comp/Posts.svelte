@@ -1,9 +1,13 @@
 <script>
-  import { formActive, posts } from "./stores.js";
+  import { onMount } from 'svelte';
+  import { formActive, posts, filter } from "./stores.js";
   import Post from "./Post.svelte";
   let fullWidth = "";
   let breaker = false;
   let width = window.innerWidth;
+  let Posts = [];
+  
+
   $: if (!$formActive) {
     fullWidth = "grid-column: 1 / span 2";
     breaker = false;
@@ -24,8 +28,7 @@
     },
   };
 
-  $: {
-    const Posts = $posts;
+  function sort(Posts) {
     const l = Posts.length;
     if (l % 3 === 0) {
       splitPosts.threeCol.one = Posts.slice(0, l / 3);
@@ -48,6 +51,15 @@
       splitPosts.twoCol.two = Posts.slice((l - 1) / 2, l);
     }
   }
+
+  $:  {
+    Posts = $posts;
+    sort(Posts);
+  }
+
+  function postFiltered() {
+    return null;
+  }
 </script>
 
 <svelte:window on:resize={() => (width = window.innerWidth)} />
@@ -56,28 +68,28 @@
   {#if width > 1000}
     <div class="one">
       {#each splitPosts.threeCol.one as props (props.id)}
-      <Post {...props} />
+      <Post {...props} on:filtered={postFiltered} />
       {/each}
     </div>
     <div class="two">
       {#each splitPosts.threeCol.two as props (props.id)}
-      <Post {...props} />
+      <Post {...props} on:filtered={postFiltered} />
       {/each}
     </div>
     <div class="three">
       {#each splitPosts.threeCol.three as props (props.id)}
-      <Post {...props} />
+      <Post {...props} on:filtered={postFiltered} />
       {/each}
     </div>
   {:else}
     <div class="one">
       {#each splitPosts.threeCol.one as props (props.id)}
-      <Post {...props} />
+      <Post {...props} on:filtered={postFiltered} />
       {/each}
     </div>
     <div class="two">
       {#each splitPosts.threeCol.two as props (props.id)}
-      <Post {...props} />
+      <Post {...props} on:filtered={postFiltered} />
       {/each}
     </div>
   {/if}
