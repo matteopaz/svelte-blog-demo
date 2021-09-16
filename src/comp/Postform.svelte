@@ -159,7 +159,7 @@
     @media (max-width: 800px) {
       grid-column: 1 / span 2;
       padding: 0 max(3.5rem, 6.5vw);
-      height: max(100vh, 85rem);
+      height: max(100vh, 95rem);
     }
   }
 

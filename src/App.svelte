@@ -52,7 +52,7 @@
     flex-basis: 90vh;
     @media (max-width: 800px) {
       &.break {
-        grid-template-rows: max(100vh, 85rem) 1fr;
+        grid-template-rows: max(100vh, 95rem) 1fr;
       }
     }
   }
