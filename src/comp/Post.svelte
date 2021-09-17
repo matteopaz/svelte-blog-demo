@@ -127,9 +127,9 @@
     place-self: start;
     grid-row: 3 / 4;
     grid-column: 1 / 3;
-    font-size: clamp(1rem, calc(var(--scalar-w) * 12), 2rem);
+    font-size: clamp(1rem, calc(var(--scalar-w) * 16), 2.5rem);
     line-height: 1.35;
-    @media (max-width: 1200px) {
+    @media (max-width: 1000px) {
       &:not(.break) {
         font-size: clamp(1rem, calc(var(--scalar-w) * 26), 4rem);
       }
