@@ -13,20 +13,23 @@
   function processTitle(title) {
    return capitalizeFirstLetter(title.split(" ").slice(0, 3).join(" "));
   }
+  let show = true;
 
-  $: filtered = () => {
-    const filters = $filter;
+  const filtered = (_filter) => {
+    const filters = _filter;
     let i = 0;
     for(i; i < filters.length; i++) {
       const truth = tags.find(tag => tag === filters[i]);
       if(!truth) break;
     }
-    dispatch('filtered', {...$$props})
+    if(i === filters.length && filters.length !== 0) dispatch('filtered', {...$$props});
     return (i === filters.length)
   }
+
+  $: show = filtered($filter);
 </script>
 
-{#if filtered()}
+{#if show}
 <div class="post" class:break={$formActive}>
   <img src={Logo} alt="Svelte logo" />
   <h4>{processTitle(title)}</h4>
@@ -67,7 +70,7 @@
   img {
       grid-column: 1 / 3;
       grid-row: 1 / 4;
-      height: 100%;
+      height: 80%;
       aspect-ratio: 1 / 1;
       place-self: center;
       z-index: 0;

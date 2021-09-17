@@ -1,12 +1,13 @@
+<svelte:options immutable={false}/>
+
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { formActive, posts, filter } from "./stores.js";
   import Post from "./Post.svelte";
   let fullWidth = "";
   let breaker = false;
   let width = window.innerWidth;
   let Posts = [];
-  
 
   $: if (!$formActive) {
     fullWidth = "grid-column: 1 / span 2";
@@ -56,9 +57,20 @@
     Posts = $posts;
     sort(Posts);
   }
-
-  function postFiltered() {
-    return null;
+  
+  let tracker = 0;
+  function postFiltered(event) {
+    tracker++;
+    if(tracker === 1) {
+      setTimeout(() => { tracker = 0; }, 120)
+      Posts = [event.detail];
+    } else if(tracker > 1 && $posts.length !== tracker) {
+      Posts = [...Posts, event.detail];
+    } else {
+      Posts = $posts;
+    }
+    console.log("sorting", sort(Posts));
+    console.log(Posts, splitPosts);
   }
 </script>
 
