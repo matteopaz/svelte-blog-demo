@@ -53,8 +53,14 @@
     }
   }
 
+  $: {
+    const check = $filter;
+    if(check.length === 0) {
+      Posts = $posts;
+    }
+  }
+
   $:  {
-    Posts = $posts;
     sort(Posts);
   }
   
@@ -62,15 +68,11 @@
   function postFiltered(event) {
     tracker++;
     if(tracker === 1) {
-      setTimeout(() => { tracker = 0; }, 120)
+      setTimeout(() => tracker = 0, 70)
       Posts = [event.detail];
-    } else if(tracker > 1 && $posts.length !== tracker) {
+    } else if(tracker > 1 && $filter.length !== 0) { 
       Posts = [...Posts, event.detail];
-    } else {
-      Posts = $posts;
     }
-    console.log("sorting", sort(Posts));
-    console.log(Posts, splitPosts);
   }
 </script>
 
